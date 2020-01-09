@@ -1,0 +1,69 @@
+<div class="container">
+  <div class="col-md-10">
+    <h2 class="titles">Tasks:</h2>
+    <br>
+    <div class="modal-body row" *ngFor="let task of tasks; let i = index">
+      <div class="col-md-4">
+        <h4 class="titles" [ngStyle]="{'text-decoration': task.Solved ? 'line-through' : 'none'}">{{task.Text}}</h4>
+        <ul>
+          <li>Date:
+            {{task.Date | date: "dd.MM.yyyy"}}</li>
+          <li>Solved: {{task.Solved}}</li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <div *ngIf="!editFlags[i]">
+          <br><br>
+          <button type="button" class="btn btn-primary" (click)="editTask(task.Id, i)">Edit task</button>
+          &nbsp; <button *ngIf="!editFlags[i]" type="button" class="btn btn btn-danger"
+            (click)="deleteTask(task.Id)">Delete task</button>
+        </div>
+        <div *ngIf="editFlags[i]">
+          <form [formGroup]="taskEditForm" (ngSubmit)="saveTask(task.Id, i)">
+
+            <div class="form-group">
+
+              <label>Text:</label>
+              <input type="text" class="form-control" id="taskText" placeholder="Enter task text"
+                formControlName="text">
+              <br>
+              <div class="inline-block">
+                <label>Solved: </label>&nbsp;
+                <input class="verticalAlign" type="checkbox" id="taskSolved" formControlName="solved">
+              </div>
+              <br>
+              <div>
+                <p-calendar [ngModelOptions]="{standalone: true}" [(ngModel)]="date" [showIcon]="true"></p-calendar>
+              </div>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Save task</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <br>
+    <button *ngIf="!addTaskFlag" type="submit" class="btn btn-success" (click)="newTask()">New task</button>
+    <div *ngIf="addTaskFlag" class="col-md-4">
+
+      <div class="form-group">
+
+        <label for="usr">Text:</label>
+        <input value="" type="text" class="form-control" placeholder="Enter task text" [(ngModel)]="newText">
+        <br>
+        <div class="inline-block">
+          <label>Solved: </label>&nbsp;
+          <input value="false" class="verticalAlign" type="checkbox" [(ngModel)]="newSolved">
+        </div>
+        <div>
+          <p-calendar [ngModelOptions]="{standalone: true}" [(ngModel)]="newDate" [showIcon]="true"></p-calendar>
+        </div>
+      </div>
+      <br>
+      <button type="submit" class="btn btn-primary" (click)="addTask(newText, newSolved, newDate)" [disabled]="!newDate || !newText">Add task</button>
+
+    </div>
+  </div>
+
+
+</div>
